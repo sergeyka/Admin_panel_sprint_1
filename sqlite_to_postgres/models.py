@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field, fields, asdict
+from dataclasses import dataclass, field, fields
 import uuid
 from typing import ClassVar
 from psycopg2._psycopg import cursor as _cursor
@@ -9,7 +9,12 @@ psycopg2.extras.register_uuid()
 
 
 class Model:
+    """Base class for models"""
+
+    # database table name
     _table: ClassVar[str]
+
+    # field that determine uniqueness of the record
     _uniq_field: ClassVar[str]
 
     def save(self, cursor: _cursor):

@@ -1,3 +1,4 @@
+"""Development configuration"""
 from .base import *
 
 DEBUG = True
@@ -10,10 +11,9 @@ DATABASES = {
         'PASSWORD': 'movies',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-        # uncomment to use schema "content"
-        # 'OPTIONS': {
-        #     'options': '-c search_path=content'
-        # }
+        'OPTIONS': {
+            'options': '-c search_path=public,content'
+        }
     }
 
 }

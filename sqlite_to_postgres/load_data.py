@@ -6,7 +6,7 @@ from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
 
 from postgres_saver import PostgresSaver
-from SQLiteLoader import SQLiteLoader
+from sqliteloader import sqliteloader
 
 
 def parse_args():
@@ -26,7 +26,7 @@ def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection):
     if args.reset:
         postgres_saver.reset()
 
-    movies_iterator = SQLiteLoader(connection, args.start, args.limit)
+    movies_iterator = sqliteloader(connection, args.start, args.limit)
     migrated = postgres_saver.save_all_data(movies_iterator)
     print("\n%d movies were migrated" % migrated)
 

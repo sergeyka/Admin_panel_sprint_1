@@ -19,7 +19,7 @@ class RoleType(models.TextChoices):
 
 class Genre(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    name = models.CharField(_('название'), max_length=255)
+    name = models.CharField(_('название'), max_length=255, unique=True)
     description = models.TextField(_('описание'), blank=True)
 
     class Meta:
@@ -33,9 +33,8 @@ class Genre(TimeStampedModel):
 
 class FilmWork(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    title = models.CharField(_('название'), max_length=255)
+    title = models.CharField(_('название'), max_length=255, unique=True)
     description = models.TextField(_('описание'), blank=True, null=True)
-    creation_date = models.DateField(_('дата создания фильма'), blank=True)
     certificate = models.TextField(_('сертификат'), blank=True)
     file_path = models.FileField(_('файл'), upload_to='film_works/', blank=True)
     rating = models.FloatField(_('рейтинг'), validators=[MinValueValidator(0)], blank=True)
@@ -61,8 +60,7 @@ class FilmWorkGenre(models.Model):
 
 class Person(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    full_name = models.CharField(_('полное имя'), max_length=255)
-    birth_date = models.DateField(_('дата рождения'))
+    full_name = models.CharField(_('полное имя'), max_length=255, unique=True)
 
     class Meta:
         db_table = 'person'

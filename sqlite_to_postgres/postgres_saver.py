@@ -8,11 +8,19 @@ class PostgresSaver:
         self._counter = 0
 
     def reset(self):
-        truncate_sql = "truncate content.film_work, content.film_work_genre, " \
-                       "content.film_work_person, content.genre,content.person;"
+        """Truncates content tables"""
+        truncate_sql = """truncate content.film_work, 
+                                   content.film_work_genre, 
+                                   content.film_work_person, 
+                                   content.genre,content.person;"""
         self.cursor.execute(truncate_sql)
 
-    def save_all_data(self, movies_iterator):
+    def save_all_data(self, movies_iterator) -> int:
+        """
+        Iterate over movies saving them in postgres content tables
+        @param movies_iterator: the movies
+        @return: number of movies saved
+        """
         cursor = self.cursor
 
         for movie in movies_iterator:

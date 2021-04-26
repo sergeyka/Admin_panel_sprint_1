@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-from .models import *
+from .models import FilmWorkPerson, FilmWorkGenre, FilmWork, Genre, Person
 
 
 class PersonRoleInline(admin.TabularInline):
@@ -16,7 +16,7 @@ class GenreInline(admin.TabularInline):
 
 @admin.register(FilmWork)
 class FilmWorkAdmin(ModelAdmin):
-    list_display = ('title', 'type', 'creation_date', 'rating')
+    list_display = ('title', 'type', 'rating')
     fields = (
         'title', 'type', 'description', 'creation_date', 'certificate',
         'file_path', 'rating'
@@ -37,6 +37,6 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'birth_date')
-    fields = ('full_name', 'birth_date')
+    list_display = ('full_name',)
+    fields = ('full_name',)
     search_fields = ('full_name',)

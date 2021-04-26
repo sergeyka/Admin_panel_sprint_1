@@ -1,16 +1,18 @@
 import json
+from json import JSONDecodeError
 
 
-class SQLiteLoader:
+class sqliteloader:
+    """Extract from SQLite and transform movies, correcting their structure"""
     def __init__(self, conn, start: int, limit: int):
 
         self.conn = conn
 
         def dict_factory(cursor, row):
-            d = {}
+            _ = {}
             for idx, col in enumerate(cursor.description):
-                d[col[0]] = row[idx]
-            return d
+                _[col[0]] = row[idx]
+            return _
 
         conn.row_factory = dict_factory
 
@@ -18,7 +20,7 @@ class SQLiteLoader:
         self.limit = limit
 
     def __iter__(self):
-        sql = "select * from movies m where 1=1 order by id limit ? offset ?"
+        sql = "select * from movies m order by id limit ? offset ?"
         self.cursor = self.conn.cursor()
 
         for row in self.cursor.execute(sql, (self.limit, self.start)):
@@ -39,7 +41,7 @@ class SQLiteLoader:
                     writers = json.loads(row['writers'])
                     for writer in writers:
                         writer_ids.add(writer['id'])
-                except:
+                except JSONDecodeError:
                     print("unable to parse " + row['writers'])
 
             doc['writer'] = self.get_writers_by_ids(writer_ids)
@@ -59,14 +61,17 @@ class SQLiteLoader:
         query = f"select id, name from writers where id in({placeholders}) and name <> 'N/A'"
         result = set()
         for w in self.conn.cursor().execute(query, list(ids)):
-            if not w['name'] or w['name'] == 'N/A':
+            if not w['name']:
                 continue
             result.add(w['name'])
 
         return result
 
     def get_actors_by_movie_id(self, movie_id):
-        query = "select a.id, a.name from actors a join movie_actors ma on a.id=ma.actor_id join movies m on ma.movie_id=m.id where m.id=?"
+        query = """select a.id, a.name 
+                   from actors a 
+                   join movie_actors ma on a.id=ma.actor_id 
+                   join movies m on ma.movie_id=m.id where m.id=?"""
         result = set()
         for a in self.conn.cursor().execute(query, (movie_id,)):
             if not a['name'] or a['name'] == 'N/A':

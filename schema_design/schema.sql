@@ -1,43 +1,42 @@
-create schema if not exists content;
+CREATE SCHEMA IF NOT EXISTS content;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-create table if not exists content.film_work
+-- FILM WORK
+CREATE TABLE IF NOT EXISTS content.film_work
 (
-    id            uuid not null
-        constraint film_work_pkey primary key,
-    title         text not null,
-    description   text,
-    rating        double precision
+    id          uuid PRIMARY KEY,
+    title       text NOT NULL,
+    description text,
+    rating      double PRECISION
 );
-
 
 -- GENRE
-create table if not exists content.genre
+CREATE TABLE IF NOT EXISTS content.genre
 (
-    id    uuid    not null primary key,
-    name varchar not null unique
+    id   uuid    PRIMARY KEY,
+    name varchar NOT NULL UNIQUE
 );
 
-create table if not exists content.film_work_genre
+-- FILM WORK to GENRE
+CREATE TABLE IF NOT EXISTS content.film_work_genre
 (
-    film_work_id uuid not null,
-    genre_id        text,
-    unique (film_work_id, genre_id)
+    film_work_id uuid NOT NULL references content.film_work(id) ON DELETE CASCADE,
+    genre_id     uuid NOT NULL references content.genre(id) ON DELETE CASCADE,
+    UNIQUE (film_work_id, genre_id)
 );
 
 
 -- PERSON (actor, writer or director of the movie)
-CREATE TABLE if not exists content.person
+CREATE TABLE IF NOT EXISTS content.person
 (
     id   uuid PRIMARY KEY,
     name varchar not null unique
 );
 
-create table if not exists content.film_work_person
+-- FILM WORK to PERSON
+CREATE TABLE IF NOT EXISTS content.film_work_person
 (
-    film_work_id uuid    not null,
-    person_id    uuid    not null,
-    "role"       varchar not null,
-    unique (film_work_id, person_id, "role")
+    film_work_id uuid    NOT NULL references content.film_work(id) ON DELETE CASCADE,
+    person_id    uuid    NOT NULL references content.person(id) ON DELETE CASCADE,
+    "role"       varchar NOT NULL,
+    UNIQUE (film_work_id, person_id, "role")
 );
