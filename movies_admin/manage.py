@@ -3,6 +3,8 @@
 import os
 import sys
 from os import getenv
+
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,8 +12,9 @@ load_dotenv()
 
 def main():
     """Run administrative tasks."""
-    environment = getenv('ENVIRONMENT')
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.' + environment)
+
+    # Starting with manage.py will load development settings in config/settings/dev.py
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.dev')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

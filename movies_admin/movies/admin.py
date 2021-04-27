@@ -18,7 +18,7 @@ class GenreInline(admin.TabularInline):
 class FilmWorkAdmin(ModelAdmin):
     list_display = ('title', 'type', 'rating')
     fields = (
-        'title', 'type', 'description', 'creation_date', 'certificate',
+        'title', 'type', 'description', 'certificate',
         'file_path', 'rating'
     )
 

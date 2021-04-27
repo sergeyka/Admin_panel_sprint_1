@@ -1,6 +1,7 @@
 """
 Settings for all environments
 """
+import os
 from os import getenv
 from pathlib import Path
 from dotenv import load_dotenv
@@ -8,7 +9,6 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
-# Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
 SECRET_KEY = getenv('SECRET_KEY')
 
 if SECRET_KEY is None:
@@ -18,7 +18,6 @@ DEBUG = getenv('DEBUG')
 
 ALLOWED_HOSTS = []
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -60,9 +59,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -78,9 +74,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -91,7 +84,5 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
