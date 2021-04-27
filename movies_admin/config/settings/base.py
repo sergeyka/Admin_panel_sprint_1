@@ -16,7 +16,9 @@ if SECRET_KEY is None:
 
 DEBUG = getenv('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*'
+]
 
 
 INSTALLED_APPS = [
